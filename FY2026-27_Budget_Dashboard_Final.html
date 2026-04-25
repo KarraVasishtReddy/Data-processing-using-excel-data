@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FY 2026-27 Mining Budget Dashboard - Complete Financial Analysis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 45px 40px;
+            text-align: center;
+            border-bottom: 4px solid #667eea;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .content {
+            padding: 45px 40px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 40px 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .icon {
+            font-size: 26px;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            padding: 28px;
+            border-radius: 12px;
+            border: 2px solid #667eea20;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .metric-subtitle {
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .chart-card {
+            background: #fafbfc;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #eaeef5;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.15);
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin-bottom: 15px;
+        }
+
+        .chart-container.small {
+            height: 280px;
+        }
+
+        /* Table Styles */
+        .table-card {
+            background: #fafbfc;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #eaeef5;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #f0f4fb 0%, #f8f9ff 100%);
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e8eef5;
+        }
+
+        tr:hover {
+            background: #f9fbfd;
+        }
+
+        .rank {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .amount {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .percentage {
+            color: #764ba2;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4fb 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 6px solid #667eea;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background: #f8f9ff;
+            padding: 30px;
+            text-align: center;
+            border-top: 2px solid #e8eef5;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 5px;
+        }
+
+        .badge.highest {
+            background: #f093fb;
+            color: white;
+        }
+
+        .badge.critical {
+            background: #667eea;
+            color: white;
+        }
+
+        .badge.stable {
+            background: #4facfe;
+            color: white;
+        }
+
+        .badge.low {
+            background: #43e97b;
+            color: white;
+        }
+
+        .red-text {
+            color: #fa709a;
+            font-weight: 600;
+        }
+
+        .green-text {
+            color: #43e97b;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 FY 2026-27 Budget Dashboard</h1>
+            <p>Mining Operations - Comprehensive Financial Analysis</p>
+            <p class="subtitle">Based on Updated Budget Summary & Departmental Allocations</p>
+        </div>
+
+        <div class="content">
+            <!-- Key Metrics -->
+            <div class="section-title">
+                <span class="icon">💰</span>
+                Budget Overview & Key Metrics
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Total OPEX Budget</div>
+                    <div class="metric-value">₹98,728</div>
+                    <div class="metric-subtitle">Excluding Statutory Costs</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Total Statutory Payments</div>
+                    <div class="metric-value">₹42,588</div>
+                    <div class="metric-subtitle">43.1% of OPEX</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Grand Total (with T&D)</div>
+                    <div class="metric-value">₹139,779</div>
+                    <div class="metric-subtitle">Final Budget Estimate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Monthly Average</div>
+                    <div class="metric-value">₹8,228</div>
+                    <div class="metric-subtitle">OPEX ÷ 12 months</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Top 10 Items %</div>
+                    <div class="metric-value">94.8%</div>
+                    <div class="metric-subtitle">Concentration Risk</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Coal Production</div>
+                    <div class="metric-value">2.25</div>
+                    <div class="metric-subtitle">Million Tonnes</div>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="section-title">
+                <span class="icon">📈</span>
+                Visual Analysis & Breakdown
+            </div>
+
+            <!-- Main Pie Chart -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Budget Distribution by Category</h3>
+                    <div class="chart-container">
+                        <canvas id="mainPieChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top 10 Costs -->
+                <div class="chart-card">
+                    <h3 class="chart-title">Top 10 Cost Items (Horizontal)</h3>
+                    <div class="chart-container small">
+                        <canvas id="topCostsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Comparison -->
+            <div class="charts-grid">
+                <!-- Bar Chart - Categories -->
+                <div class="chart-card">
+                    <h3 class="chart-title">Category Amounts & Percentages</h3>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Statutory Payments -->
+                <div class="chart-card">
+                    <h3 class="chart-title">Statutory Payments Breakdown</h3>
+                    <div class="info-box">
+                        <strong>Total Statutory Cost:</strong> ₹42,587.55 Lakhs<br>
+                        <strong>% of Total Budget:</strong> 43.1%<br>
+                        <strong>Highest Component:</strong> Royalty @ 14% (73.5%)
+                    </div>
+                    <div class="chart-container small">
+                        <canvas id="statutoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Tables Section -->
+            <div class="section-title">
+                <span class="icon">📋</span>
+                Detailed Budget Line Items & Analysis
+            </div>
+
+            <!-- Main Budget Table -->
+            <div class="table-card">
+                <h3>Complete Top 10 Budget Breakdown (OPEX)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">Rank</th>
+                            <th style="width: 35%;">Item Description</th>
+                            <th style="width: 20%;">Category</th>
+                            <th style="text-align: right; width: 20%;">Amount (₹ Lakhs)</th>
+                            <th style="text-align: right; width: 20%;">% of OPEX</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="rank">1</span></td>
+                            <td><strong>Diesel @ ₹83 INR/L</strong></td>
+                            <td>Operations</td>
+                            <td class="amount" style="text-align: right;">28,048</td>
+                            <td class="percentage" style="text-align: right;">28.4%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">2</span></td>
+                            <td><strong>Spares</strong></td>
+                            <td>Repair & Maintenance</td>
+                            <td class="amount" style="text-align: right;">17,940</td>
+                            <td class="percentage" style="text-align: right;">18.2%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">3</span></td>
+                            <td><strong>Repairing/Overhauling & Workshop Services</strong></td>
+                            <td>Repair & Maintenance</td>
+                            <td class="amount" style="text-align: right;">14,570</td>
+                            <td class="percentage" style="text-align: right;">14.8%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">4</span></td>
+                            <td><strong>Explosives & Accessories</strong></td>
+                            <td>Operations</td>
+                            <td class="amount" style="text-align: right;">12,054</td>
+                            <td class="percentage" style="text-align: right;">12.2%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">5</span></td>
+                            <td><strong>Manpower Cost (Including Explosive Handlers)</strong></td>
+                            <td>Manpower</td>
+                            <td class="amount" style="text-align: right;">7,581</td>
+                            <td class="percentage" style="text-align: right;">7.7%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">6</span></td>
+                            <td><strong>Tyres</strong></td>
+                            <td>Repair & Maintenance</td>
+                            <td class="amount" style="text-align: right;">5,584</td>
+                            <td class="percentage" style="text-align: right;">5.7%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">7</span></td>
+                            <td><strong>Technical Cost</strong></td>
+                            <td>Technical</td>
+                            <td class="amount" style="text-align: right;">2,565</td>
+                            <td class="percentage" style="text-align: right;">2.6%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">8</span></td>
+                            <td><strong>Admin & Security</strong></td>
+                            <td>Overhead</td>
+                            <td class="amount" style="text-align: right;">2,082</td>
+                            <td class="percentage" style="text-align: right;">2.1%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">9</span></td>
+                            <td><strong>Lube & Coolant</strong></td>
+                            <td>Repair & Maintenance</td>
+                            <td class="amount" style="text-align: right;">1,823</td>
+                            <td class="percentage" style="text-align: right;">1.8%</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank">10</span></td>
+                            <td><strong>Water Management, Topsoil & Misc</strong></td>
+                            <td>Operations</td>
+                            <td class="amount" style="text-align: right;">1,318</td>
+                            <td class="percentage" style="text-align: right;">1.3%</td>
+                        </tr>
+                        <tr style="background: #f0f4fb; font-weight: 700;">
+                            <td colspan="3" style="text-align: right;">Subtotal (Top 10 Items)</td>
+                            <td class="amount" style="text-align: right;">93,564</td>
+                            <td class="percentage" style="text-align: right;">94.8%</td>
+                        </tr>
+                        <tr style="background: #fff; font-weight: 600;">
+                            <td colspan="3" style="text-align: right;">Other Items & Recoverables</td>
+                            <td class="amount" style="text-align: right;">5,164</td>
+                            <td class="percentage" style="text-align: right;">5.2%</td>
+                        </tr>
+                        <tr style="background: #f8f9ff; font-weight: 700; font-size: 15px;">
+                            <td colspan="3" style="text-align: right;">TOTAL OPEX</td>
+                            <td class="amount" style="text-align: right;">98,728</td>
+                            <td class="percentage" style="text-align: right;">100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Category Summary Table -->
+            <div class="table-card">
+                <h3>Category Summary (5-Category Classification)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cost Category</th>
+                            <th style="text-align: right;">Budget (₹ Lakhs)</th>
+                            <th style="text-align: right;">% of Total OPEX</th>
+                            <th style="text-align: right;">Monthly Average</th>
+                            <th>Status / Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Operations</strong></td>
+                            <td class="amount" style="text-align: right;">43,535</td>
+                            <td class="percentage" style="text-align: right;">44.1%</td>
+                            <td style="text-align: right;">3,628</td>
+                            <td><span class="badge highest">HIGHEST</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Repair & Maintenance</strong></td>
+                            <td class="amount" style="text-align: right;">41,230</td>
+                            <td class="percentage" style="text-align: right;">41.7%</td>
+                            <td style="text-align: right;">3,436</td>
+                            <td><span class="badge critical">CRITICAL</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Manpower Cost</strong></td>
+                            <td class="amount" style="text-align: right;">7,581</td>
+                            <td class="percentage" style="text-align: right;">7.7%</td>
+                            <td style="text-align: right;">632</td>
+                            <td><span class="badge stable">STABLE</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Overhead (Admin+CSR/R&R/Medical)</strong></td>
+                            <td class="amount" style="text-align: right;">3,818</td>
+                            <td class="percentage" style="text-align: right;">3.9%</td>
+                            <td style="text-align: right;">318</td>
+                            <td><span class="badge low">LOW</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Technical Cost</strong></td>
+                            <td class="amount" style="text-align: right;">2,565</td>
+                            <td class="percentage" style="text-align: right;">2.6%</td>
+                            <td style="text-align: right;">214</td>
+                            <td><span class="badge low">LOW</span></td>
+                        </tr>
+                        <tr style="font-weight: 700; background: #f8f9ff;">
+                            <td>TOTAL OPERATIONAL EXPENDITURE</td>
+                            <td class="amount" style="text-align: right;">98,728</td>
+                            <td class="percentage" style="text-align: right;">100%</td>
+                            <td style="text-align: right;">8,228</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Statutory Payments Table -->
+            <div class="table-card">
+                <h3>Statutory Payments & Taxes (Breakdown by Authority)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Payment Type / Tax Head</th>
+                            <th style="text-align: right;">Amount (₹ Lakhs)</th>
+                            <th style="text-align: right;">% of Statutory Total</th>
+                            <th>Paying Authority</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Royalty @ 14% of Coal Base Price</strong></td>
+                            <td class="amount" style="text-align: right;">31,277</td>
+                            <td class="percentage" style="text-align: right;">73.5%</td>
+                            <td>District Collector</td>
+                            <td>G-10 Base: ₹1,024/MT</td>
+                        </tr>
+                        <tr>
+                            <td><strong>District Mineral Foundation (DMF) @ 30% of Royalty</strong></td>
+                            <td class="amount" style="text-align: right;">7,952</td>
+                            <td class="percentage" style="text-align: right;">18.7%</td>
+                            <td>State Government</td>
+                            <td>Linked to Royalty</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Forest Transit Permit (@ ₹57/MT)</strong></td>
+                            <td class="amount" style="text-align: right;">1,282</td>
+                            <td class="percentage" style="text-align: right;">3.0%</td>
+                            <td>Forest Department (DFO)</td>
+                            <td>Based on production volume</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mine Development Expense</strong></td>
+                            <td class="amount" style="text-align: right;">995</td>
+                            <td class="percentage" style="text-align: right;">2.3%</td>
+                            <td>Coal Controller</td>
+                            <td>As per Mine Closure Plan</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NMET @ 2% of Royalty</strong></td>
+                            <td class="amount" style="text-align: right;">530</td>
+                            <td class="percentage" style="text-align: right;">1.2%</td>
+                            <td>Central Government</td>
+                            <td>National Mineral Exploration Fund</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MAHAGATSVA</strong></td>
+                            <td class="amount" style="text-align: right;">366</td>
+                            <td class="percentage" style="text-align: right;">0.9%</td>
+                            <td>District Collector</td>
+                            <td>State Benefit/Contribution</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bhu-Bhatak (Land Compensation)</strong></td>
+                            <td class="amount" style="text-align: right;">186</td>
+                            <td class="percentage" style="text-align: right;">0.4%</td>
+                            <td>Government</td>
+                            <td>One-time/Annual levy</td>
+                        </tr>
+                        <tr style="font-weight: 700; background: #f8f9ff;">
+                            <td>TOTAL STATUTORY PAYMENTS</td>
+                            <td class="amount" style="text-align: right;">42,588</td>
+                            <td class="percentage" style="text-align: right;">100%</td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Production Schedule -->
+            <div class="section-title">
+                <span class="icon">⛏️</span>
+                Production Schedule & Key Metrics (FY 2026-27)
+            </div>
+
+            <div class="table-card">
+                <h3>Production & Operational Parameters</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th style="text-align: right;">Unit of Measurement</th>
+                            <th style="text-align: right;">Annual Plan</th>
+                            <th style="text-align: right;">Monthly Avg</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Coal Production (Total Handling)</strong></td>
+                            <td style="text-align: right;">Million Tonnes (MT)</td>
+                            <td style="text-align: right;">2.25</td>
+                            <td style="text-align: right;">0.1875</td>
+                            <td><span class="badge stable">TARGET</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Overburden (OB) Production</strong></td>
+                            <td style="text-align: right;">Million BCM (MBCM)</td>
+                            <td style="text-align: right;">29.70</td>
+                            <td style="text-align: right;">2.475</td>
+                            <td><span class="badge stable">ON TRACK</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Excavation (Coal + OB)</strong></td>
+                            <td style="text-align: right;">MBCM</td>
+                            <td style="text-align: right;">35.15</td>
+                            <td style="text-align: right;">2.929</td>
+                            <td><span class="badge stable">PLAN</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stripping Ratio (OB:Coal)</strong></td>
+                            <td style="text-align: right;">BCM/MT</td>
+                            <td style="text-align: right;">13.20</td>
+                            <td style="text-align: right;">N/A</td>
+                            <td>Operational Metric</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Operating Days</strong></td>
+                            <td style="text-align: right;">Days</td>
+                            <td style="text-align: right;">355</td>
+                            <td style="text-align: right;">~29.6</td>
+                            <td>Includes 10 holidays + weather obstruction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Diesel Consumption (Total)</strong></td>
+                            <td style="text-align: right;">KL (Kiloliters)</td>
+                            <td style="text-align: right;">TBD</td>
+                            <td style="text-align: right;">TBD</td>
+                            <td>Dependent on equipment utilization</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Electricity Consumption</strong></td>
+                            <td style="text-align: right;">Units (KWh)</td>
+                            <td style="text-align: right;">72</td>
+                            <td style="text-align: right;">6</td>
+                            <td>Mine + Workshop + Facilities</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CAPEX Overview -->
+            <div class="section-title">
+                <span class="icon">🏗️</span>
+                CAPEX Budget Overview (FY 2026-27)
+            </div>
+
+            <div class="info-box">
+                <strong style="font-size: 14px; display: block; margin-bottom: 8px;">⚠️ CAPEX Status: Under Development</strong>
+                The CAPEX budget sheet shows planned project categories (Land, Survey, Tech Services, New Projects) with no amounts currently allocated. Total CAPEX Budget: <span class="red-text">₹0 (Not yet populated)</span>. This is separate from OPEX and will be detailed when specific capital projects are identified.
+            </div>
+
+            <!-- Summary Insights -->
+            <div class="section-title">
+                <span class="icon">💡</span>
+                Key Insights, Risk Assessment & Budget Analysis
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-bottom: 40px;">
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bottom: 8px;">🎯 Dominant Cost Driver</strong>
+                    Diesel consumption is the single largest expense item at <span class="red-text">₹28,048L (28.4%)</span> of total OPEX. This indicates high operational dependence on equipment usage and fuel prices, making diesel cost management critical for budget control.
+                </div>
+
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bottom: 8px;">📈 Concentration Risk Analysis</strong>
+                    The top 10 cost items represent <span class="red-text">94.8%</span> of the budget, showing significant concentration in specific expense areas. This requires careful monitoring and control of these high-impact items to avoid cost overruns.
+                </div>
+
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bottom: 8px;">💰 Statutory Impact on Total Cost</strong>
+                    Taxes and statutory payments (₹42,588L) add <span class="red-text">43.1%</span> to the operational budget, increasing total project cost to ₹139,779L. Royalty alone accounts for 73.5% of statutory payments.
+                </div>
+
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bottom: 8px;">📊 Category Distribution Pattern</strong>
+                    <strong>Operations + Repair & Maintenance</strong> together comprise <span class="red-text">85.8%</span> of OPEX (₹84,765L). This two-category concentration reflects the capital-intensive nature of mining operations.
+                </div>
+
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bottom: 8px;">🔧 Maintenance Cost Breakdown</strong>
+                    Within Repair & Maintenance (₹41,230L), the largest components are: Spares ₹17,940L (43.5%), Workshop Services ₹14,570L (35.3%), and Tyres ₹5,584L (13.5%), indicating heavy equipment depreciation.
+                </div>
+
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bold: 8px;">⛏️ Production Economics</strong>
+                    Coal production plan of 2.25 MT with ₹98,728L OPEX translates to approximately <strong>₹4,387 per MT</strong> (before statutory costs). Adding T&D makes it ₹6,212 per MT, critical for price competitiveness.
+                </div>
+
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bottom: 8px;">⚡ Critical Monitoring Areas</strong>
+                    Priority items for monthly tracking: (1) Diesel consumption & pricing, (2) Spares availability & costs, (3) Equipment maintenance schedules, (4) Manpower productivity, (5) Regulatory compliance for statutory payments.
+                </div>
+
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bottom: 8px;">📋 Budget Variance Risk</strong>
+                    With 94.8% of budget concentrated in top 10 items, a 5% variance in any of these could impact total budget by up to ₹4,678L. Contingency planning and active cost control mechanisms are essential.
+                </div>
+
+                <div class="info-box">
+                    <strong style="font-size: 14px; display: block; margin-bottom: 8px;">✅ Recoverables & Offsets</strong>
+                    Total recoverables amount to ₹1,536L, which partially offset statutory costs, reducing effective T&D burden. However, recovery depends on regulatory changes (electricity duty, R&R in change-in-law scenarios).
+                </div>
+            </div>
+
+            <!-- Executive Summary -->
+            <div class="section-title">
+                <span class="icon">📌</span>
+                Executive Summary & Recommendations
+            </div>
+
+            <div class="info-box" style="border-left-width: 8px; padding: 25px; background: linear-gradient(135deg, #f8f9ff 0%, #f0f4fb 100%); font-size: 14px; line-height: 1.8;">
+                <h4 style="color: #667eea; margin-bottom: 15px; font-size: 16px;">FY 2026-27 Budget Summary</h4>
+                <p><strong>Total Operational Expenditure (OPEX):</strong> ₹<strong>98,728 Lakhs</strong></p>
+                <p><strong>Statutory Payments & Taxes:</strong> ₹<strong>42,588 Lakhs</strong> (43.1% of OPEX)</p>
+                <p><strong>Total Budget (OPEX + T&D):</strong> ₹<strong>139,779 Lakhs</strong></p>
+                <p style="margin-top: 15px;"><strong>Key Drivers:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Diesel (Operations): ₹28,048L (28.4%)</li>
+                    <li>Spares (R&M): ₹17,940L (18.2%)</li>
+                    <li>Workshop Services (R&M): ₹14,570L (14.8%)</li>
+                    <li>Explosives (Operations): ₹12,054L (12.2%)</li>
+                    <li>Manpower (Labor): ₹7,581L (7.7%)</li>
+                </ul>
+                <p style="margin-top: 15px; background: #fff; padding: 12px; border-left: 4px solid #667eea; border-radius: 4px;"><strong>Recommendation:</strong> Implement monthly variance tracking with 5% tolerance limits for top 10 items. Establish a cost control task force to monitor diesel prices, spare parts availability, and statutory payment changes. Review equipment downtime to optimize maintenance spending.</p>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>FY 2026-27 Mining Operations Budget Dashboard</strong> | Comprehensive Financial Planning & Analysis</p>
+            <p>Data Source: Updated_budget_26-27.xlsx | All amounts in ₹ Lakhs (₹000,000) unless otherwise stated</p>
+            <p>Generated: Final Draft | Production Schedule & CAPEX Status: TBD | Statutory Calculations based on 14% Royalty & approved rates</p>
+            <p style="margin-top: 15px; color: #999; font-size: 12px;">⚠️ Note: CAPEX budget pending project details. Charts reflect Management Recommended AOP. Statutory values subject to regulatory changes.</p>
+        </div>
+    </div>
+
+    <script>
+        const chartColors = {
+            primary: '#667eea',
+            secondary: '#764ba2',
+            accent1: '#f093fb',
+            accent2: '#4facfe',
+            accent3: '#43e97b',
+            accent4: '#fa709a'
+        };
+
+        // 1. Main Pie Chart - Budget Distribution by Category
+        const piectx = document.getElementById('mainPieChart').getContext('2d');
+        new Chart(piectx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Repair & Maintenance (₹41,230L)', 'Operations (₹43,535L)', 'Manpower (₹7,581L)', 'Overhead (₹3,818L)', 'Technical (₹2,565L)'],
+                datasets: [{
+                    data: [41229.81, 43534.64, 7580.68, 3817.86, 2564.91],
+                    backgroundColor: [
+                        chartColors.primary,
+                        chartColors.accent1,
+                        chartColors.accent2,
+                        chartColors.accent4,
+                        chartColors.accent3
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        position: 'bottom',
+                        labels: { font: { size: 12 }, padding: 15, usePointStyle: true }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed;
+                                const total = 98727.90;
+                                const pct = ((value / total) * 100).toFixed(1);
+                                return '₹' + value.toLocaleString('en-IN', {maximumFractionDigits:0}) + 'L  (' + pct + '%)';
+                            }
+                        },
+                        backgroundColor: 'rgba(0,0,0,0.85)',
+                        padding: 15,
+                        titleFont: { size: 13, weight: 'bold' },
+                        bodyFont: { size: 12 },
+                        borderColor: chartColors.primary,
+                        borderWidth: 2
+                    }
+                }
+            }
+        });
+
+        // 2. Top 10 Costs Horizontal Bar Chart
+        const top10Labels = [
+            'Diesel @ 83 INR/L',
+            'Spares',
+            'Repairing/Workshop',
+            'Explosives & Acc.',
+            'Manpower Cost',
+            'Tyres',
+            'Technical Cost',
+            'Admin & Security',
+            'Lube',
+            'Water Mgmt & Misc'
+        ];
+        const top10Data = [28048.07, 17940.00, 14570.00, 12053.89, 7580.68, 5583.52, 2564.91, 2082.18, 1823.05, 1318.00];
+
+        const topctx = document.getElementById('topCostsChart').getContext('2d');
+        new Chart(topctx, {
+            type: 'bar',
+            data: {
+                labels: top10Labels,
+                datasets: [{
+                    label: 'Amount (₹ Lakhs)',
+                    data: top10Data,
+                    backgroundColor: [
+                        '#667eea','#764ba2','#f093fb','#4facfe','#43e97b',
+                        '#fa709a','#f6d365','#00c9ff','#a18cd1','#fda085'
+                    ],
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const val = context.parsed.x;
+                                const pct = ((val / 98727.90) * 100).toFixed(1);
+                                return ' ₹' + val.toLocaleString('en-IN', {maximumFractionDigits:0}) + 'L  (' + pct + '%)';
+                            }
+                        },
+                        backgroundColor: 'rgba(0,0,0,0.82)',
+                        padding: 12,
+                        titleFont: { size: 12, weight: 'bold' },
+                        bodyFont: { size: 12 }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { callback: v => '₹' + (v/1000).toFixed(0) + 'K' },
+                        grid: { color: '#f0f0f0' }
+                    },
+                    y: { ticks: { font: { size: 11 } } }
+                }
+            }
+        });
+
+        // 3. Category Bar Chart
+        const catLabels = ['Operations', 'Repair &\nMaintenance', 'Manpower', 'Overhead', 'Technical'];
+        const catData = [43534.64, 41229.81, 7580.68, 3817.86, 2564.91];
+        const catTotal = 98727.90;
+
+        const catctx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(catctx, {
+            type: 'bar',
+            data: {
+                labels: catLabels,
+                datasets: [{
+                    label: 'Budget (₹ Lakhs)',
+                    data: catData,
+                    backgroundColor: [
+                        chartColors.accent1,
+                        chartColors.primary,
+                        chartColors.accent2,
+                        chartColors.accent4,
+                        chartColors.accent3
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const val = context.parsed.y;
+                                const pct = ((val / catTotal) * 100).toFixed(1);
+                                return ' ₹' + val.toLocaleString('en-IN', {maximumFractionDigits:0}) + 'L  (' + pct + '%)';
+                            }
+                        },
+                        backgroundColor: 'rgba(0,0,0,0.82)',
+                        padding: 12,
+                        titleFont: { size: 12, weight: 'bold' },
+                        bodyFont: { size: 12 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: v => '₹' + (v/1000).toFixed(0) + 'K' },
+                        grid: { color: '#f0f0f0' }
+                    },
+                    x: { ticks: { font: { size: 11 } } }
+                }
+            }
+        });
+
+        // 4. Statutory Payments Doughnut Chart
+        const statctx = document.getElementById('statutoryChart').getContext('2d');
+        new Chart(statctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Royalty @14% (₹31,277L)',
+                    'DMF @30% of Royalty (₹7,952L)',
+                    'Forest Transit (₹1,282L)',
+                    'Mine Dev Exp (₹995L)',
+                    'NMET @2% (₹530L)',
+                    'MAHAGATSVA (₹366L)',
+                    'Bhu-Bhatak (₹186L)'
+                ],
+                datasets: [{
+                    data: [31276.56, 7951.67, 1281.70, 994.95, 530.11, 366.20, 186.37],
+                    backgroundColor: [
+                        '#667eea','#764ba2','#f093fb','#4facfe','#43e97b','#fa709a','#f6d365'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 3,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        position: 'right',
+                        labels: { font: { size: 10 }, padding: 10, boxWidth: 14 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const val = context.parsed;
+                                const total = 42587.55;
+                                const pct = ((val / total) * 100).toFixed(1);
+                                return ' ₹' + val.toLocaleString('en-IN', {maximumFractionDigits:0}) + 'L  (' + pct + '%)';
+                            }
+                        },
+                        backgroundColor: 'rgba(0,0,0,0.82)',
+                        padding: 12
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
